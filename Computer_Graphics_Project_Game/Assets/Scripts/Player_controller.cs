@@ -27,6 +27,8 @@ public class Player_controller : MonoBehaviour
     public Vector3 previousPlatPos;
     public bool onPlat;
 
+    public Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,37 +42,48 @@ public class Player_controller : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
-        if (speed < 0f)
+        if (speed < 0f) { 
             speed = 0f;
-        if (speed < maxSpeed && (horizontalInput != 0f || verticalInput != 0f))
+            animator.SetFloat("Speed", 0);
+        }
+        if (speed < maxSpeed && (horizontalInput != 0f || verticalInput != 0f)) {
             speed += acceleration;
+            animator.SetFloat("Speed", 0.5f);
+        }
         if (horizontalInput == 0f && verticalInput == 0f && speed > 0)
             speed -= deacceleration;
 
-        
-        
+
+
         //transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
         //transform.Translate(Vector3.forward * verticalInput * Time.deltaTime * speed);
         ApplyGravity();
         //transform.Translate(Vector3.down * vertical_velocity);
 
         moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
-        
+
         if (Input.GetKeyDown(KeyCode.Space) && controller.isGrounded)
         {
             vertical_velocity = 15;
+            animator.SetFloat("VerticalVelocity", 1);
         }
+        if (vertical_velocity < 0)
+            animator.SetFloat("VerticalVelocity", -1);
+        if (controller.isGrounded)
+            animator.SetBool("Grounded", true);
+        else
+            animator.SetBool("Grounded", false);
         float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
         float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
         transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
         Vector3 newMoveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-        
-         controller.Move(newMoveDirection.normalized * speed + new Vector3(0, vertical_velocity, 0) * Time.deltaTime);
-  
+
+        controller.Move(newMoveDirection.normalized * speed + new Vector3(0, vertical_velocity, 0) * Time.deltaTime);
+
     }
 
-    
+
     public void ApplyGravity()
     {
         vertical_velocity += gravity * gravity_multiplier * Time.deltaTime;
@@ -91,17 +104,17 @@ public class Player_controller : MonoBehaviour
 
         }
 
-       
-            if (hit.gameObject.CompareTag("Platform"))
-            {
-                transform.parent = hit.transform;
-            }
-            else
-            {
-                transform.parent = null;
-            }
+
+        if (hit.gameObject.CompareTag("Platform"))
+        {
+            transform.parent = hit.transform;
+        }
+        else
+        {
+            transform.parent = null;
+        }
 
     }
 
-    
+
 }
