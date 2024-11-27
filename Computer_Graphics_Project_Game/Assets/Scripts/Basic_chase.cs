@@ -29,7 +29,6 @@ public class Basic_chase : MonoBehaviour
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
     }
-    
 
     // Update is called once per frame
     void Update()
@@ -84,11 +83,13 @@ public class Basic_chase : MonoBehaviour
     private void AttackPlayer()
     {
         agent.SetDestination(transform.position);
-        transform.LookAt(player);
+        
         if (!alreadyAttacked)
         {
-            Rigidbody rb = Instantiate(projectile, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 32f, ForceMode.Impulse);
+            transform.LookAt(player);
+            Vector3 spawn = transform.position + transform.forward * 1f + transform.up * 0.5f;
+            Rigidbody rb = Instantiate(projectile, spawn, Quaternion.identity).GetComponent<Rigidbody>();
+            rb.AddForce(transform.forward * 50f, ForceMode.Impulse);
             rb.AddForce(transform.up * 8f, ForceMode.Impulse);
 
 
@@ -101,4 +102,6 @@ public class Basic_chase : MonoBehaviour
     {
         alreadyAttacked = false;
     }
+
+    
 }

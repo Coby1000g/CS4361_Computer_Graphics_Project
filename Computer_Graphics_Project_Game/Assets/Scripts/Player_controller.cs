@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class Player_controller : MonoBehaviour
     public float gravity = -9.8f;
     public float gravity_multiplier = 6f;
     public float turnSmoothTime = 0.1f;
+    public float health = 3f;
     float turnSmoothVelocity;
 
     public CharacterController controller;
@@ -26,6 +28,10 @@ public class Player_controller : MonoBehaviour
     public Vector3 platformMovement;
     public Vector3 previousPlatPos;
     public bool onPlat;
+    public bool invul = false;
+
+    public TextMeshProUGUI Status;
+    public TextMeshProUGUI Health;
 
     public Animator animator;
 
@@ -94,26 +100,60 @@ public class Player_controller : MonoBehaviour
         if (hit.gameObject.CompareTag("Enemy"))
         {
             RaycastHit stomp;
-            if (Physics.Raycast(transform.position, Vector3.down, out stomp, raycast_dist))
+            if (Physics.Raycast(transform.position, Vector3.down, out stomp, raycast_dist) && !controller.isGrounded)
             {
                 Debug.Log("Enemy detected, destroying...");
                 Destroy(hit.gameObject);
                 vertical_velocity = 5f;
-                //controller.Move(Vector3.up * 200f * Time.deltaTime);
+            }
+            else 
+                if (!invul)
+                {
+                    health--;
+                    Health.text = "Health: " + health;
+                    invul = true;
+                    StartCoroutine(HoldOn());
+                    if (health == 0)
+                    {
+                        Status.text = "Game Over";
+                        gameObject.SetActive(false);
+                    }
+                }
+            
+
+        }
+        else if (hit.gameObject.CompareTag("Projectile"))
+        {
+            if (!invul)
+            {
+                health--;
+                Health.text = "Health: " + health;
+                invul = true;
+                StartCoroutine(HoldOn());
+                if (health == 0)
+                {
+                    Status.text = "Game Over";
+                    gameObject.SetActive(false);
+                }
+            }
+        }
+        
+       
+            if (hit.gameObject.CompareTag("Platform"))
+            {
+                transform.parent = hit.transform;
+            }
+            else
+            {
+                transform.parent = null;
             }
 
-        }
+    }
 
-
-        if (hit.gameObject.CompareTag("Platform"))
-        {
-            transform.parent = hit.transform;
-        }
-        else
-        {
-            transform.parent = null;
-        }
-
+    IEnumerator HoldOn()
+    {
+        yield return new WaitForSeconds(2);
+        invul = false;
     }
 
 
