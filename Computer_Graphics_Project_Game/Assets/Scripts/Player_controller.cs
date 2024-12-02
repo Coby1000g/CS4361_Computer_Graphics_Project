@@ -29,11 +29,13 @@ public class Player_controller : MonoBehaviour
     public Vector3 previousPlatPos;
     public bool onPlat;
     public bool invul = false;
+    public bool doubleJump = false;
 
     public TextMeshProUGUI Status;
     public TextMeshProUGUI Health;
 
     public Animator animator;
+    public bool powered = false;
 
     // Start is called before the first frame update
     void Start()
@@ -72,6 +74,13 @@ public class Player_controller : MonoBehaviour
         {
             vertical_velocity = 15;
             animator.SetFloat("VerticalVelocity", 1);
+            doubleJump = true;
+        }
+        else if(powered && !controller.isGrounded && doubleJump && Input.GetKeyDown(KeyCode.Space))
+        {
+            vertical_velocity = 15;
+            animator.SetFloat("VerticalVelocity", 1);
+            doubleJump = false;
         }
         if (vertical_velocity < 0)
             animator.SetFloat("VerticalVelocity", -1);
@@ -109,6 +118,7 @@ public class Player_controller : MonoBehaviour
             else 
                 if (!invul)
                 {
+                    Debug.Log("Player hit by an enemy");
                     health--;
                     Health.text = "Health: " + health;
                     invul = true;
@@ -118,7 +128,9 @@ public class Player_controller : MonoBehaviour
                         Status.text = "Game Over";
                         gameObject.SetActive(false);
                     }
-                }
+                    powered = false;
+                    animator.SetInteger("PowerUp", 0);
+            }
             
 
         }
@@ -137,16 +149,21 @@ public class Player_controller : MonoBehaviour
                 }
             }
         }
-        
+        else if (hit.gameObject.CompareTag("PowerUp"))
+        {
+            Destroy(hit.gameObject);
+            animator.SetInteger("PowerUp", 1);
+            powered = true;
+        }
        
-            if (hit.gameObject.CompareTag("Platform"))
-            {
-                transform.parent = hit.transform;
-            }
-            else
-            {
-                transform.parent = null;
-            }
+        if (hit.gameObject.CompareTag("Platform"))
+        {
+            transform.parent = hit.transform;
+        }
+        else
+        {
+            transform.parent = null;
+        }
 
     }
 
