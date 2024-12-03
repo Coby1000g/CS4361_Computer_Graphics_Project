@@ -8,6 +8,7 @@ using UnityEngine;
 public class Collected : MonoBehaviour
 {
     public TextMeshProUGUI collected;
+    public TextMeshProUGUI Status;
     public int numCollect;
     // Start is called before the first frame update
     void Start()
@@ -28,6 +29,10 @@ public class Collected : MonoBehaviour
             
             collected.text = "Collected: " + ++numCollect;
             Destroy(hit.gameObject);
+            if (numCollect == 4)
+            {
+                Status.text = "WINNER";
+            }
         }
     }
 

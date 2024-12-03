@@ -46,11 +46,17 @@ public class Player_controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        transform.parent = null;
+        if (transform.position.y <= -200)
+        {
+            Status.text = "Game Over";
+            gameObject.SetActive(false);
+        }
 
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
-        if (speed < 0f) { 
+        if (speed <= 0f) { 
             speed = 0f;
             animator.SetFloat("Speed", 0);
         }
@@ -101,7 +107,8 @@ public class Player_controller : MonoBehaviour
 
     public void ApplyGravity()
     {
-        vertical_velocity += gravity * gravity_multiplier * Time.deltaTime;
+        if (!controller.isGrounded)
+         vertical_velocity += gravity * gravity_multiplier * Time.deltaTime;
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -160,11 +167,8 @@ public class Player_controller : MonoBehaviour
         {
             transform.parent = hit.transform;
         }
-        else
-        {
-            transform.parent = null;
-        }
-
+        
+        
     }
 
     IEnumerator HoldOn()

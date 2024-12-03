@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agent: {fileID: 271294555767058729}
-  player: {fileID: 0}
+  player: {fileID: 5957136081776205717, guid: 69b791fd13312eb4cbc8079f46a83e52, type: 3}
   whatIsGround:
     serializedVersion: 2
     m_Bits: 64
@@ -100,7 +100,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   walkPoint: {x: 0, y: 0, z: 0}
-  walkPointRange: 5
+  walkPointRange: 3
   timeBetweenAttacks: 2
   projectile: {fileID: 2242743834594879658, guid: 4e0db69984143c64d9ea9cea83cf6e00, type: 3}
   sightRange: 10
@@ -267,7 +267,7 @@ Animator:
   m_GameObject: {fileID: 7180319316403945698}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ef229d2feb8a41e47b7beefda693dec3, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
