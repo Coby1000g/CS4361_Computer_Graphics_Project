@@ -89,8 +89,8 @@ public class Basic_chase : MonoBehaviour
             transform.LookAt(player);
             Vector3 spawn = transform.position + transform.forward * 1f + transform.up * 0.5f;
             Rigidbody rb = Instantiate(projectile, spawn, Quaternion.identity).GetComponent<Rigidbody>();
-            rb.AddForce(transform.forward * 50f, ForceMode.Impulse);
-            rb.AddForce(transform.up * 8f, ForceMode.Impulse);
+            rb.AddForce(transform.forward * 25f, ForceMode.Impulse);
+            rb.AddForce(transform.up * 3f, ForceMode.Impulse);
 
 
             alreadyAttacked = true;
