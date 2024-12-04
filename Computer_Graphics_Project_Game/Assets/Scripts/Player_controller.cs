@@ -68,11 +68,8 @@ public class Player_controller : MonoBehaviour
             speed -= deacceleration;
 
 
-
-        //transform.Translate(Vector3.right * horizontalInput * Time.deltaTime * speed);
-        //transform.Translate(Vector3.forward * verticalInput * Time.deltaTime * speed);
         ApplyGravity();
-        //transform.Translate(Vector3.down * vertical_velocity);
+        
 
         moveDirection = new Vector3(horizontalInput, 0f, verticalInput).normalized;
 
